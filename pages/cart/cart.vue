@@ -39,8 +39,6 @@
 					</u-grid>
 				</view>
 
-
-
 				<!--底部去结算的效果-->
 				<view class="action-section">
 					<view class="checkbox">
@@ -56,8 +54,6 @@
 					<button type="primary" class="no-border confirm-btn" @click="createOrder">去结算</button>
 				</view>
 			</view>
-
-
 		</view>
 
 	</view>

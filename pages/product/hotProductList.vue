@@ -2,13 +2,8 @@
 
 	<!-- 产品上新页面-->
 	<view class="container">
-		<view class="top-image">
-			<view class="image-wrapper">
-				<image src="/static/hot_product_banner.png" mode="aspectFill"></image>
-			</view>
-		</view>
 		
-		
+		<HeadImage imageSrc="/static/hot_product_banner.png"></HeadImage>
 
 		<u-gap height="10"></u-gap>
 
@@ -18,23 +13,8 @@
 				相关产品
 			</u-row>
 			
-
-			<view class="brand_body">
-				<u-grid :border="false" col="2">
-					<u-grid-item v-for="(item,baseListIndex) in productList" :key="baseListIndex">
-						<view class="brand_body_item" @click="navToDetailPage(item)">
-							<u-image width="170px" height="165px" :src="item.pic"></u-image>
-
-							<text class="title clamp">{{item.name}}</text>
-							<text class="title2">{{item.subTitle}}</text>
-							<view class="price-box">
-								<text class="price">￥{{item.price}}</text>
-								<text>已售 {{item.sale}}</text>
-							</view>
-						</view>
-					</u-grid-item>
-				</u-grid>
-			</view>
+			<ProductListWithSale :productList="productList"></ProductListWithSale>
+			
 		</view>
 
 		<u-loadmore :status="loadingType" />
@@ -46,6 +26,9 @@
 	import {
 		fetchHotProductList
 	} from '@/api/home.js';
+	
+	import HeadImage from '@/components/head-image.vue';
+	
 	
 	import ProductListWithSale from '@/components/product-list-with-sale.vue';
 	
@@ -61,7 +44,8 @@
 			};
 		},
 		components:{
-			ProductListWithSale
+			ProductListWithSale,
+			HeadImage
 		},
 		onLoad(options) {
 			this.loadData();
@@ -135,28 +119,6 @@
 
 	.container {
 
-
-
-		// 页面头部图片
-		.top-image {
-			height: 200px;
-
-			.image-wrapper {
-				display: flex;
-				justify-content: center;
-				align-content: center;
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
-
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
-
-
 		.brand-box {
 			padding: 16px;
 			background: #fff;
@@ -167,62 +129,6 @@
 				color: #909399;
 			}
 		}
-
-
-		// 对应的分类下的元素主体
-		.brand_body {
-			padding: 0 30rpx;
-			background: #fff;
-
-			// 重写对应的样式
-			.u-grid-item {
-				align-items: normal;
-			}
-
-			// 自定义slot 元素
-			.brand_body_item {
-				margin-right: 4%;
-				padding-bottom: 20rpx;
-			}
-
-
-			.price-box {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				padding-right: 10upx;
-				font-size: 24upx;
-				color: $font-color-light;
-
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-
-
-
-				.price {
-					font-size: $font-lg;
-					color: $uni-color-primary;
-					line-height: 80upx;
-				}
-			}
-
-
-			.title {
-				font-size: 16px;
-				color: #303133;
-				line-height: 40px;
-			}
-
-			.title2 {
-				font-size: 13px;
-				color: #909399;
-				line-height: 22px;
-				height: 44px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				display: block;
-			}
-		}
+		
 	}
 </style>

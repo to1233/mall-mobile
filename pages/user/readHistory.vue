@@ -7,39 +7,8 @@
 			</u-empty>
 		</view>
 
-
 		<!-- 浏览历史 -->
-		<view class="read-section">
-			<u-list @scrolltolower="scrolltolower">
-				<u-list-item v-for="(item, index) in productList" :key="index">
-
-					<u-row class="read-item-box" @click="navToDetailPage(item)">
-						<u-col :span="5">
-							<u-image width="138px" height="138px" :src="item.productPic"></u-image>
-						</u-col>
-						<u-col :span="7" class="titleContent">
-
-							<view class="title clamp">
-								{{item.productName}}
-							</view>
-
-							<view class="title2 ">
-								{{item.productSubTitle}}
-							</view>
-
-							<view style="display: flex;  justify-content: space-between;line-height: 44px;">
-								<text class="price">￥{{item.productPrice}}</text>
-								<text class="time">{{item.createTime | formatDateTime}}</text>
-							</view>
-						</u-col>
-
-
-					</u-row>
-
-
-				</u-list-item>
-			</u-list>
-		</view>
+		<ProductListWithTime :productList="productList" @scrolltolower="scrolltolower"></ProductListWithTime>
 
 		<u-loadmore :status="loadingType" />
 	</view>
@@ -48,9 +17,6 @@
 </template>
 
 <script>
-	import {
-		formatDate
-	} from '@/utils/date';
 
 	import {
 		mapState
@@ -60,7 +26,8 @@
 		fetchReadHistoryList,
 		clearReadHistory
 	} from '@/api/memberReadHistory.js';
-
+	
+	import ProductListWithTime from '@/components/product-list-with-time.vue';
 
 	export default {
 		data() {
@@ -73,6 +40,9 @@
 					pageSize: 6
 				}
 			}
+		},
+		components: {
+			ProductListWithTime
 		},
 		// 监控 store
 		computed: {
@@ -108,19 +78,12 @@
 			this.searchParam.pageNum++;
 			this.loadData();
 		},
-		filters: {
-			formatDateTime(time) {
-				if (time == null || time === '') {
-					return 'N/A';
-				}
-				let date = new Date(time);
-				return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
-			},
-		},
+	
 		methods: {
 			// 下滑到底部
 			scrolltolower() {
-				this.loadData()
+				this.searchParam.pageNum++;
+				this.loadData();
 			},
 			// 加载商品 带下拉刷新和下滑加载
 			async loadData(type = 'add', loading) {
@@ -165,14 +128,7 @@
 					}
 				});
 			},
-			// 详情
-			navToDetailPage(item) {
-				console.log(item);
-				let id = item.productId;
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
-			},
+	
 			stopPrevent() {}
 
 		}
@@ -181,46 +137,5 @@
 
 <style lang="scss">
 	.container {
-
-		.read-section {
-			padding: 0 30upx;
-			margin-top: 16upx;
-
-
-			.read-item-box {
-				margin-top: 16upx;
-			}
-
-
-
-			.titleContent {
-				display: flex;
-				flex-direction: column;
-				line-height: 44px;
-
-				.title2 {
-					font-size: 13px;
-					color: #303133;
-					line-height: 40upx;
-					height: 44px;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					display: block;
-				}
-
-				.time {
-					font-size: $font-sm;
-					color: $font-color-dark;
-					line-height: 80upx;
-				}
-
-				.price {
-					font-size: $font-lg;
-					color: $uni-color-primary;
-					line-height: 80upx;
-				}
-
-			}
-		}
 	}
 </style>

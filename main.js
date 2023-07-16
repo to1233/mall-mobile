@@ -16,10 +16,21 @@ const msg = (title, duration=1500, mask=false, icon='none')=>{
 		icon
 	});
 }
+
+const prePage = ()=>{
+	let pages = getCurrentPages();
+	let prePage = pages[pages.length - 2];
+	// #ifdef H5
+	return prePage;
+	// #endif
+	return prePage.$vm;
+}
+
+
 Vue.use(uView);
 Vue.config.productionTip = false
 Vue.prototype.$store = store;
-Vue.prototype.$api = {msg};
+Vue.prototype.$api = {msg,prePage};
 App.mpType = 'app'
 
 const app = new Vue({

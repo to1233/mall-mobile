@@ -1,10 +1,7 @@
 <template>
 	<view class="container">
-		<view class="top-image">
-			<view class="image-wrapper">
-				<image src="/static/recommend_brand_banner.png" mode="aspectFill"></image>
-			</view>
-		</view>
+		
+		<HeadImage imageSrc="/static/recommend_brand_banner.png"></HeadImage>
 
 		<view>
 			<u-row justify="center" customStyle="margin-bottom: 10px">
@@ -40,6 +37,7 @@
 		fetchBrandRecommendList
 	} from '@/api/brand.js';
 	
+	import HeadImage from '@/components/head-image.vue';
 	
 	export default {
 		data() {
@@ -51,6 +49,9 @@
 					pageSize: 6
 				}
 			};
+		},
+		components: {
+			HeadImage
 		},
 		
 		onLoad(options) {
@@ -127,26 +128,6 @@
 
 
 	.container {
-
-		// 页面头部图片
-		.top-image {
-			height: 200px;
-
-			.image-wrapper {
-				display: flex;
-				justify-content: center;
-				align-content: center;
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
-
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
-
 
 		// 对应的分类下的元素主体
 		.brand_body {

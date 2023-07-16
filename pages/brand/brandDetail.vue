@@ -3,11 +3,8 @@
 	<view class="container">
 		<!-- 头部 -->
 
-		<view class="top-image">
-			<view class="image-wrapper">
-				<image :src="brand.bigPic" mode="aspectFill"></image>
-			</view>
-		</view>
+		<!--对应的头部图片-->
+		<HeadImage :imageSrc="brand.bigPic"></HeadImage>
 
 		<!--品牌描述-->
 		<view class="brande-desc">
@@ -65,24 +62,8 @@
 			<u-row justify="center" customStyle="margin-bottom: 10px;">
 				相关产品
 			</u-row>
-
-			<view class="brand_body">
-				<u-grid :border="false" col="2">
-					<u-grid-item v-for="(item,baseListIndex) in productList" :key="baseListIndex">
-						<view class="brand_body_item" @click="navToDetailPage(item)">
-							<u-image width="170px" height="165px" :src="item.pic"></u-image>
-
-							<text class="title clamp">{{item.name}}</text>
-							<text class="title2">{{item.subTitle}}</text>
-							<view class="price-box">
-								<text class="price">￥{{item.price}}</text>
-								<text>已售 {{item.sale}}</text>
-							</view>
-						</view>
-					</u-grid-item>
-				</u-grid>
-			</view>
-
+			
+			<ProductListWithSale :productList="productList"></ProductListWithSale>
 		</view>
 
 		<u-loadmore :status="loadingType" />
@@ -97,6 +78,10 @@
 		fetchBrandProductList
 	} from '@/api/brand';
 
+
+	import HeadImage from '@/components/head-image.vue';
+	import ProductListWithSale from '@/components/product-list-with-sale.vue';
+	
 	import {
 		createBrandAttention,
 		deleteBrandAttention,
@@ -122,6 +107,10 @@
 					pageSize: 4
 				}
 			};
+		},
+		components: {
+			ProductListWithSale,
+			HeadImage
 		},
 		// 页面加载的时候
 		onLoad(options) {
@@ -274,25 +263,7 @@
 
 	.container {
 
-		// 页面头部图片
-		.top-image {
-			height: 200px;
-
-			.image-wrapper {
-				display: flex;
-				justify-content: center;
-				align-content: center;
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
-
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
-
+	
 		// 品牌描述
 		.brande-desc {
 			padding: 30upx 50upx;

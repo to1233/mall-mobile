@@ -12,7 +12,7 @@
 		<!--对应的订单元素列表 -->
 		<swiper :current="tabCurrentIndex" class="swiper-box" @change="changeTab">
 			<swiper-item class="tab-content" v-for="(tabItem,tabIndex) in navList" :key="tabIndex">
-				<scroll-view class="list-scroll-content" scroll-y >
+				<scroll-view class="list-scroll-content" scroll-y>
 					<!-- 空白页 -->
 					<u-empty mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" v-if="orderList.length === 0">
 					</u-empty>
@@ -65,9 +65,9 @@
 											<u-col span="8" offset="3.5">
 												<view class="price-box">
 													共
-													<text class="num">{{2}}</text>
+													<text class="num">{{calcTotalQuantity(item)}}</text>
 													件商品 实付款
-													<text class="price">{{7399}}</text>
+													<text class="price">{{item.payAmount}}</text>
 												</view>
 											</u-col>
 										</u-row>
@@ -96,7 +96,7 @@
 										<u-row>
 											<u-col span="2.5" offset="6.5">
 												<u-button type="error " size="small" text="查看物流" :plain="true"
-													shape="circle" class="custom-style" @click="receiveOrder(item.id)">
+													shape="circle" class="custom-style" @click="show(item.id)">
 												</u-button>
 											</u-col>
 
@@ -111,10 +111,10 @@
 							</u-list-item>
 						</u-list>
 					</view>
-					
-					<!-- 显示更多 --> 
+
+					<!-- 显示更多 -->
 					<uni-load-more :status="loadingType"></uni-load-more>
-				
+
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -230,8 +230,8 @@
 			//获取订单列表
 			loadData(type = 'refresh') {
 				console.log('被触发了');
-				
-				
+
+
 				if (type == 'refresh') {
 					this.orderParam.pageNum = 1;
 				} else {
@@ -417,11 +417,11 @@
 				}
 			}
 		}
-		
+
 		.list-scroll-content {
 			height: 100%;
 		}
-		
+
 
 		// 订单列表信息
 		.order-list {

@@ -6,38 +6,9 @@
 			</u-empty>
 		</view>
 		<view v-else>
-
-			<view class="product-collection">
-				<u-list @scrolltolower="scrolltolower">
-					<u-list-item v-for="(item, index) in productList" :key="index">
-				
-						<u-row class="read-item-box" @click="navToDetailPage(item)">
-							<u-col :span="5">
-								<u-image width="138px" height="138px" :src="item.productPic"></u-image>
-							</u-col>
-							<u-col :span="7" class="titleContent">
-				
-								<view class="title clamp">
-									{{item.productName}}
-								</view>
-				
-								<view class="title2 ">
-									{{item.productSubTitle}}
-								</view>
-				
-								<view style="display: flex;  justify-content: space-between;line-height: 44px;">
-									<text class="price">￥{{item.productPrice}}</text>
-									<text class="time">{{item.createTime | formatDateTime}}</text>
-								</view>
-							</u-col>
-				
-				
-						</u-row>
-				
-				
-					</u-list-item>
-				</u-list>
-			</view>
+			<!-- 浏览历史 -->
+			<ProductListWithTime :productList="productList" @scrolltolower="scrolltolower"></ProductListWithTime>
+			
 		</view>
 
 		<uni-load-more :status="loadingType"></uni-load-more>
@@ -58,9 +29,14 @@
 		fetchProductCollectionList,
 		clearProductCollection
 	} from '@/api/memberProductCollection.js';
+	
+	import ProductListWithTime from '@/components/product-list-with-time.vue';
+	
+	
 	export default {
 		components: {
 			uniLoadMore,
+			ProductListWithTime
 		},
 		data() {
 			return {
@@ -83,11 +59,6 @@
 		//下拉刷新
 		onPullDownRefresh() {
 			this.loadData('refresh');
-		},
-		//加载更多
-		onReachBottom() {
-			this.searchParam.pageNum++;
-			this.loadData();
 		},
 		// #ifndef MP
 		onNavigationBarButtonTap(e) {
@@ -164,6 +135,10 @@
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
+			},
+			// 下滑到底部
+			scrolltolower() {
+				this.loadData()
 			},
 			stopPrevent() {}
 		},

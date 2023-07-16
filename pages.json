@@ -20,20 +20,22 @@
 							"placeholderColor": "#606266"
 						},
 						"buttons": [{
-							"fontSrc": "/static/ytion.ttf",
-							"text": "\ue60d",
-							"fontSize": "26",
-							"color": "#303133",
-							"float": "left",
-							"background": "rgba(0,0,0,0)"
-						}, {
-							"fontSrc": "/static/yticon.ttf",
-							"text": "\ue744",
-							"fontSize": "27",
-							"color": "#303133",
-							"background": "rgba(0,0,0,0)",
-							"redDot": true
-						}]
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue60d",
+								"fontSize": "26",
+								"color": "#303133",
+								"float": "left",
+								"background": "rgba(0,0,0,0)"
+							},
+							{
+								"fontSrc": "/static/yticon.ttf",
+								"text": "\ue744",
+								"fontSize": "27",
+								"color": "#303133",
+								"background": "rgba(0,0,0,0)",
+								"redDot": true
+							}
+						]
 					}
 				}
 			}
@@ -64,7 +66,7 @@
 					"bounce": "none"
 				}
 			}
-		},	
+		},
 		{
 			"path": "pages/order/order",
 			"style": {
@@ -73,7 +75,7 @@
 					"bounce": "none"
 				}
 			}
-		},	
+		},
 		{
 			"path": "pages/money/paySuccess",
 			"style": {
@@ -104,7 +106,7 @@
 				}
 			}
 		},
-	
+
 		{
 			"path": "pages/brand/brandDetail",
 			"style": {

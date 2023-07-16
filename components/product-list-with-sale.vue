@@ -23,6 +23,7 @@
 	export default {
 		name:"ProductListWithSale",
 		props :{
+			// 对应的产品集合
 			productList: {
 				type: Array,
 				default: []
