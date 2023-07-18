@@ -11,20 +11,14 @@
 其对应代码实现的效果如下:
 
 
-![image](https://github.com/to1233/mall-mobile/assets/23630996/86d6f773-37fd-4224-8474-c74384a5ef36)
-![image](https://github.com/to1233/mall-mobile/assets/23630996/cf8bb9e2-c62c-4061-88ed-98c3c2b7d1c1)
-![image](https://github.com/to1233/mall-mobile/assets/23630996/f54b0265-d93a-4889-8956-2a6259ce4d12)
+![image](https://github.com/to1233/mall-mobile/assets/23630996/42352bc9-f309-405d-8db7-eab8bafaf2d0)   ![image](https://github.com/to1233/mall-mobile/assets/23630996/1527749c-c372-465c-9226-67717d8b2ad5)
+
+![image](https://github.com/to1233/mall-mobile/assets/23630996/8f542ce5-375c-4c64-a29f-6b0eac7fb35d)  ![image](https://github.com/to1233/mall-mobile/assets/23630996/6b645017-cb5a-4f35-80b6-077709b57b8c)
 
 
-![image](https://github.com/to1233/mall-mobile/assets/23630996/4ce989ad-305e-457a-973e-59e76d388554)
+![image](https://github.com/to1233/mall-mobile/assets/23630996/5e804009-1341-44ff-a709-240e59afc4e0)  ![image](https://github.com/to1233/mall-mobile/assets/23630996/5881c56d-dd1d-49ae-bd8d-b682604215d5)
 
+![image](https://github.com/to1233/mall-mobile/assets/23630996/056f9eca-6cb4-4701-b71e-81b6b4e9c6af)  ![image](https://github.com/to1233/mall-mobile/assets/23630996/c6cc1815-fc38-4fbc-95fc-bcb83be4678b)
 
-![image](https://github.com/to1233/mall-mobile/assets/23630996/966add9e-b0cb-41cd-92a7-8dae6222a872)
+![image](https://github.com/to1233/mall-mobile/assets/23630996/1c33e4e9-3bd2-43cb-b406-ee004afa0c0b)  ![image](https://github.com/to1233/mall-mobile/assets/23630996/2da04e35-7c87-4516-b5ea-749a0deb189b)
 
-
-
-![image](https://github.com/to1233/mall-mobile/assets/23630996/c16f6677-673a-4453-bee2-3f11c73623ed)
-
-
-
-![image](https://github.com/to1233/mall-mobile/assets/23630996/c6cad713-9538-48a3-a8ef-78b0c9dabb88)
