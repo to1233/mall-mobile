@@ -24,7 +24,7 @@
 
 			</u-cell>
 		</view>
-		
+
 		<view class="cover-container">
 			<!--  拥有的统计信息-->
 			<view class="ownInfo-content">
@@ -164,7 +164,8 @@
 						imgName: 'history',
 						title: '我的评价',
 						iconUrl: 'icon-pingjia',
-						color: '#ee883b'
+						color: '#ee883b',
+						url: '/pages/comment/list'
 					}, {
 						imgName: 'list',
 						title: '设置',

@@ -13,7 +13,7 @@
 		</view>
 		<u-gap height="10" bgColor="#f7f7f7"></u-gap>
 		<view class="guider">
-			<u-grid :border="false"  col="4">
+			<u-grid :border="false" col="4">
 				<u-grid-item v-for="(baseListItem,baseListIndex) in baseList" :key="baseListIndex">
 					<image :src="baseListItem.src"></image>
 					<text class="grid-text">{{baseListItem.title}}</text>
@@ -28,10 +28,10 @@
 		<view class="cotent_body">
 
 
-<view>
+			<view>
 				<view>
 					<u-cell-group>
-						<u-cell value="" is-link @click="navToHotProductListPage()" :border="false"> 
+						<u-cell value="" is-link @click="navToHotProductListPage()" :border="false">
 							<view slot="title" class="u-slot-title">
 								<view class="title_left">
 									<image class="brand" src="/static/icon_hot_product.png"></image>
@@ -47,8 +47,8 @@
 				</view>
 
 				<view class="brand_body">
-					<u-grid :border="false"  col="1">
-						<u-grid-item v-for="(item,baseListIndex) in hotProductList" :key="baseListIndex" >
+					<u-grid :border="false" col="1">
+						<u-grid-item v-for="(item,baseListIndex) in hotProductList" :key="baseListIndex">
 							<view class="brand_body_item like_body" @click="navToDetailPage(item)">
 								<u-image width="105px" height="125px" :src="item.pic"></u-image>
 
@@ -76,7 +76,7 @@
 			<!-- 品牌制造商-->
 			<view>
 				<view>
-					<u-cell-group >
+					<u-cell-group>
 						<u-cell value="" is-link @click="navToRecommendBrandPage()" :border="false">
 							<view slot="title" class="u-slot-title">
 								<view class="title_left">
@@ -95,8 +95,9 @@
 
 				<view class="brand_body">
 					<view>
-						<u-grid :border="false"  col="2">
-							<u-grid-item v-for="(item,baseListIndex) in brandList" :key="baseListIndex" @click="navToBrandDetailPage(item)">
+						<u-grid :border="false" col="2">
+							<u-grid-item v-for="(item,baseListIndex) in brandList" :key="baseListIndex"
+								@click="navToBrandDetailPage(item)">
 								<view class="brand_body_item">
 									<u-image width="150px" height="150px" :src="item.logo" mode="aspectFit"></u-image>
 									<view class="brand_item_info">
@@ -119,7 +120,7 @@
 			<view>
 				<view>
 					<u-cell-group>
-						<u-cell value=""  :border="false">
+						<u-cell value="" :border="false">
 							<view slot="title" class="u-slot-title">
 								<view class="title_left">
 									<image class="brand" src="/static/icon_recommend_product.png"></image>
@@ -151,17 +152,7 @@
 					</u-grid>
 				</view>
 			</view>
-
-
 		</view>
-
-
-
-
-
-
-
-
 	</view>
 </template>
 
@@ -218,7 +209,13 @@
 				],
 			}
 		},
-
+		// 监听搜索栏的确认事件
+		onNavigationBarSearchInputConfirmed(event) {
+			console.log('输入的结果为---',event.text);
+			uni.navigateTo({
+				url: `/pages/product/searchList?searchValue=${event.text}`
+			})
+		},
 		// 下拉刷新
 		onPullDownRefresh() {
 			this.recommendParams.pageNum = 1;
@@ -387,7 +384,7 @@
 	.header {
 		position: relative;
 		padding-top: 10px;
-		background-color: rgb(203, 87, 60);
+		background-color: 	 $page-color-base;;
 
 		.titleNview-placing {
 			height: var(--status-bar-height);
@@ -493,20 +490,20 @@
 			text-overflow: ellipsis;
 			display: block;
 		}
-		
+
 		.like_body {
 			display: flex;
 			flex-direction: row;
 		}
-		
-		
+
+
 		.like_right {
 			width: 70%;
 			display: flex;
 			flex-direction: column;
 			padding-left: 20px;
 		}
-		
-		
+
+
 	}
 </style>

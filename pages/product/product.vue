@@ -71,10 +71,10 @@
 			</u-row>
 		</view>
 
-		<view class="eva-section">
+		<view class="eva-section"  v-if="commentInfo.commentCount > 0" @click="navToCommentList">
 			<u-cell is-link :border="false">
 				<view slot="title">
-					<text>评价(86)</text>
+					<text>评价({{commentInfo.commentCount}})</text>
 				</view>
 
 				<view slot="value">
@@ -85,30 +85,38 @@
 			<u-row>
 				<u-col :span="3">
 					<view>
-						<u-image :src="src" width="80px" height="80px"></u-image>
+						<u-image :src="commentInfo.omsCommentDetail.memberLogoUrl" width="80px" height="80px"></u-image>
 					</view>
 				</u-col>
 				<u-col :span="9">
 					<u-row>
-						<text>Leo yo</text>
+						<text>{{commentInfo.omsCommentDetail.memberName}}</text>
 					</u-row>
 					<u-row>
-						<text class="con">商品收到了，79元两件，质量不错，试了一下有点瘦，但是加个外罩很漂亮，我很喜欢</text>
+						<text class="con">{{commentInfo.omsCommentDetail.descContent}}</text>
 					</u-row>
 					<u-row class="bot">
 						<u-col :span="6">
-							<text class="attr">购买类型：XL 红色</text>
+							<text class="attr">购买类型：{{commentInfo.omsCommentDetail.productAttr}}</text>
 						</u-col>
 						<u-col :span="6">
-							<text class="time">2019-04-01 19:21</text>
+							<text class="time">{{commentInfo.omsCommentDetail.createDay}}</text>
 						</u-col>
 					</u-row>
 				</u-col>
 			</u-row>
+			
 		</view>
+		
+		<!-- 暂无任何评论 -->
+		<view class="eva-section-no-comment" v-else>
+			<text>暂无任何评论</text>
+		</view>
+		
+		
 
 		<!-- 品牌信息 -->
-		<view class="brand-info">
+		<view class="brand-info" @click="navToBrandDetail">
 			<view style="height: 44px;">
 				<u-divider text="品牌信息"></u-divider>
 			</view>
@@ -244,7 +252,14 @@
 		createProductCollection,
 		deleteProductCollection,
 		productCollectionDetail
-	} from '@/api/memberProductCollection.js'
+	} from '@/api/memberProductCollection.js';
+	
+	import {
+		findLastComment
+	} from '@/api/comment.js';
+	
+	
+	
 
 	import {
 		mapState
@@ -297,6 +312,7 @@
 				shareList: [],
 				imgList: [],
 				desc: '',
+				commentInfo: [],
 				specList: [],
 				specChildList: [],
 				product: {},
@@ -326,6 +342,7 @@
 			let id = options.id;
 			this.shareList = defaultShareList;
 			this.loadData(id);
+			this.showProductComment(id);
 		},
 		filters: {
 			formDateTime(time) {
@@ -363,6 +380,16 @@
 					this.initProductCollection();
 				});
 			},
+			
+			async showProductComment(id) {
+				console.log('请求评论');
+				findLastComment(id).then(response => {
+					this.commentInfo = response.data;
+					console.log('对应的结果--' +  response.data);
+				})
+			},
+			
+			
 			showDetailType() {
 				this.showType = true;
 			},
@@ -378,9 +405,6 @@
 				this.showParam = false
 				// console.log('close');
 			},
-
-
-
 
 			open() {
 				// console.log('open');
@@ -555,10 +579,17 @@
 			navToBrandDetail() {
 				let id = this.brand.id;
 				uni.navigateTo({
-					url: `/pages/brand/brandDetail?id={id}`
+					url: '/pages/brand/brandDetail?id='+id
 				})
 			},
-
+			// 跳转到评论集合页面
+			navToCommentList() {
+				let productId = this.product.id;
+				console.log(this.product.id);
+				 uni.navigateTo({
+				 	url: '/pages/comment/list?productId='+productId
+				 })
+			},
 			//设置服务信息
 			initServiceList() {
 				console.log(this.product);
@@ -858,6 +889,17 @@
 				color: $font-color-light;
 			}
 		}
+		
+		// 没有评论
+		.eva-section-no-comment {
+			background-color: #fff;
+			height: 120rpx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		
 
 		.brand-info {
 			background-color: #fff;

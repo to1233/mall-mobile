@@ -25,7 +25,7 @@
 								<view class="order-item">
 
 									<!-- 头部 时间以及 操作按钮 -->
-									<u-cell :title="item.createTime | formatDateTime">
+									<u-cell :title="item.createTime | formatDateTime" @click="navToOrderDetail(item.id)">
 										<view slot="value" style="display: flex;">
 											<view>
 												<text class="state"
@@ -107,6 +107,17 @@
 											</u-col>
 										</u-row>
 									</view>
+									
+									<view v-if="item.status == 3 && existShowCommentChild(item.orderItemList) ">
+										<u-row>
+											<u-col span="2.5" offset="9">
+												<u-button type="error " size="small" text="我要评价" :plain="true"
+													shape="circle" class="custom-style" @click="createComment(item.id)">
+												</u-button>
+											</u-col>
+										</u-row>
+									</view>
+									
 								</view>
 							</u-list-item>
 						</u-list>
@@ -268,6 +279,22 @@
 				this.tabCurrentIndex = e.target.current;
 				this.loadData();
 			},
+			// 判断该订单下是否存在还没有被评价的子元素
+			existShowCommentChild(childList)
+			{	
+				
+				let waitCommentList =  childList.filter((item,index) => {
+					return item.commentFlag === 0;
+				});
+				
+				return waitCommentList != null && waitCommentList.length > 0;
+			},
+			// 跳转到对应的订单详情页面--只读
+			navToOrderDetail(orderId) {
+				uni.redirectTo({
+					url: `/pages/order/orderDetail?orderId=${orderId}`
+				});
+			},
 			//顶部tab点击
 			tabClick(index) {
 				this.tabCurrentIndex = index;
@@ -346,6 +373,12 @@
 						}
 					}
 				});
+			},
+			// 创建评价
+			createComment(orderId) {
+				uni.navigateTo({
+					url: `/pages/comment/createComment?orderId=${orderId}`
+				})
 			},
 			//查看订单详情
 			showOrderDetail(orderId) {

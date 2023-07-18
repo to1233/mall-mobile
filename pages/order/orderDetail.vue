@@ -1,18 +1,25 @@
 <template>
-	<view class="container">
+
+	<view>
+		<view class="status-section">
+			<image :src="orderStatus.image" class="icon" />
+			<text class="label-text">{{orderStatus.text}}</text>
+		</view>
+
+
 		<view class="address-section">
-			<u-cell icon="map" is-link :border="false" url="/pages/address/address?source=1">
+			<u-cell icon="map" :border="false">
 
 				<!-- user-info -->
 				<view slot="title" style="display: flex; flex-direction: row;">
-					<text class="name">{{currentAddress.name}}</text>
-					<text class="mobile">{{currentAddress.phoneNumber}}</text>
+					<text class="name">{{order.receiverName}}</text>
+					<text class="mobile">{{order.receiverPhone}}</text>
 				</view>
 
 				<!-- address-info -->
 				<view slot="label" class="address">
-					<text class="address">{{currentAddress.province}} {{currentAddress.city}} {{currentAddress.region}}
-						{{currentAddress.detailAddress}}</text>
+					<text class="address">{{order.receiverProvince}} {{order.receiverCity}} {{order.receiverRegion}}
+						{{order.receiverDetailAddress}}</text>
 				</view>
 			</u-cell>
 
@@ -22,7 +29,6 @@
 			</image>
 		</view>
 
-		<u-gap height="10"></u-gap>
 
 		<view class="goods-section">
 			<u-cell title="商品信息">
@@ -30,7 +36,7 @@
 			</u-cell>
 			<view class="brand_body">
 				<u-grid :border="false" col="1">
-					<u-grid-item v-for="(item,baseListIndex) in cartPromotionItemList" :key="baseListIndex">
+					<u-grid-item v-for="(item,baseListIndex) in order.orderItemList" :key="baseListIndex">
 						<view class="brand_body_item">
 							<!-- 图片信息 -->
 							<view style="display: flex;align-items: center;justify-content: center;">
@@ -40,11 +46,11 @@
 							<view class="like_right">
 								<text class="title clamp">{{item.productName}} </text>
 								<text class="spec">{{item.productAttr | formatProductAttr}}</text>
-								<text class="promotion clamp">{{item.promotionMessage}}</text>
+								<text class="promotion clamp">{{item.promotionName}}</text>
 
 								<view class="price-box">
-									<text class="price">￥{{item.price}}</text>
-									<text class="number">x {{item.quantity}}</text>
+									<text class="price">￥{{item.productPrice}}</text>
+									<text class="number">x {{item.productQuantity}}</text>
 								</view>
 							</view>
 						</view>
@@ -55,7 +61,6 @@
 
 		<u-gap height="10"></u-gap>
 
-
 		<view class="good-detail">
 
 			<u-cell>
@@ -64,32 +69,32 @@
 				</view>
 
 				<view slot="value" class="cell-tip">
-					￥{{calcAmount.totalAmount}}
+					￥{{order.totalAmount}}
 				</view>
 			</u-cell>
-		
+
 			<u-cell>
 				<view slot="title" class="good-detail-item-attr">
 					运费
 				</view>
 
 				<view slot="value" class="cell-tip">
-					￥{{calcAmount.freightAmount}}
+					￥{{order.freightAmount}}
 				</view>
 
 			</u-cell>
-			
+
 			<u-cell>
 				<view slot="title" class="good-detail-item-attr">
 					活动优惠
 				</view>
-			
+
 				<view slot="value" class="cell-tip red">
-					-￥{{calcAmount.promotionAmount}}
+					-￥{{order.promotionAmount}}
 				</view>
 			</u-cell>
-			
-			
+
+
 
 			<u-cell>
 				<view slot="title" class="good-detail-item-attr" style="display: flex;">
@@ -98,68 +103,136 @@
 					</view>
 
 					<view>
-						<input class="desc" type="text" v-model="desc" placeholder="请填写备注信息"
-							placeholder-class="placeholder" />
+						<text class="desc">{{order.note}}</text>
 					</view>
 				</view>
 			</u-cell>
 		</view>
 
 
-		<view class="pay-section">
-			<u-row>
-				<u-col :span="1.5" offset="0.5">
-					<text>实付款</text>
-				</u-col>
-				<u-col :span="0.5">
-					<text>￥</text>
-				</u-col>
-				<u-col :span="3" class="price">
-					<text>{{calcAmount.payAmount}}</text>
-				</u-col>
-				<u-col :span="4" offset="2.5">
-					<u-button text="提交订单" size="normal" type="error" @click="submit" class="submit"></u-button>
-				</u-col>
-			</u-row>
+		<u-gap height="10"></u-gap>
+
+		<!--订单明细 -->
+		<view class="good-detail">
+
+			<u-cell>
+				<view slot="title" class="good-detail-item-attr">
+					订单编号
+				</view>
+
+				<view slot="value" class="cell-tip">
+					{{order.orderSn}}
+				</view>
+			</u-cell>
+
+			<u-cell>
+				<view slot="title" class="good-detail-item-attr">
+					提交时间
+				</view>
+
+				<view slot="value" class="cell-tip">
+					{{order.createTime | formatDateTime}}
+				</view>
+
+			</u-cell>
+
+			<u-cell>
+				<view slot="title" class="good-detail-item-attr">
+					支付方式
+				</view>
+
+				<view slot="value" class="cell-tip ">
+					{{order.payType | formatPayType}}
+				</view>
+			</u-cell>
+
+
+
+			<u-cell  v-if="order.status==1||order.status==2||order.status==3">
+				<view slot="title" class="good-detail-item-attr">
+					实付金额
+				</view>
+
+				<view slot="value" class="cell-tip ">
+					￥{{order.payAmount}}
+				</view>
+			</u-cell>
+
+			<u-cell v-if="order.status==1||order.status==2||order.status==3">
+				<view slot="title" class="good-detail-item-attr">
+					付款时间
+				</view>
+
+				<view slot="value" class="cell-tip">
+					{{order.paymentTime | formatDateTime}}
+				</view>
+			</u-cell>
 		</view>
 
 
+		<!-- 底部 -->
+		<view class="footer" v-if="order.status==0||order.status==2||order.status==3">
+			<u-row v-if="order.status==0" style="height: 90upx;">
+				<u-col :span="5">
+					<view style="display: flex;align-items: center;justify-content: center;">
+						<text>应付金额</text>
+						<text class="price-tip">￥</text>
+						<text class="price">{{order.payAmount}}</text>
+					</view>
 
+				</u-col>
+
+
+				<u-col :span="3" offset="0.5">
+					<u-button size="small" shape="circle" @click="cancelOrder(order.id)">取消订单</u-button>
+				</u-col>
+				<u-col :span="3" offset="0.5">
+					<u-button type="primary" shape="circle" size="small" @click="payOrder(order.id)">立即付款</u-button>
+				</u-col>
+			</u-row>
+
+			<u-row v-if="order.status == 2" style="height: 90upx;">
+				<u-col :span="3" offset="5.5" >
+					<u-button size="small" shape="circle">查看物流</u-button>
+				</u-col>
+				<u-col :span="3" offset="0.5">
+					<u-button type="primary" size="small" shape="circle" @click="receiveOrder(order.id)">确认收货</u-button>
+				</u-col>
+			</u-row>
+
+			<u-row v-if="order.status == 3" style="height: 90upx;">
+				<u-col :span="3" offset="5.5">
+					<u-button size="small" shape="circle">申请售后</u-button>
+				</u-col>
+				<u-col :span="3" offset="0.5" v-if="existShowCommentChild(order.orderItemList)">
+					<u-button type="primary" size="small" shape="circle" @click="createComment(order.id)">评价商品</u-button>
+				</u-col>
+			</u-row>
+		</view>
 
 	</view>
 </template>
 
 <script>
 	import {
-		generateConfirmOrder,
-		generateOrder
+		fetchOrderDetail,
+		cancelUserOrder,
+		confirmReceiveOrder
 	} from '@/api/order.js';
 	import {
 		formatDate
 	} from '@/utils/date';
-
 	export default {
 		data() {
 			return {
-				maskState: 0, //优惠券面板显示状态
-				desc: '', //备注
-				payType: 1, //1微信 2支付宝
-				couponList: [],
-				memberReceiveAddressList: [],
-				currentAddress: {},
-				cartPromotionItemList: [],
-				calcAmount: {},
-				currCoupon: null,
-				useIntegration: 0,
-				integrationConsumeSetting: {},
-				memberIntegration: 0,
-				cartIds: []
+				orderId: null,
+				order: {},
+				orderStatus: {}
 			}
 		},
 		onLoad(option) {
 			//商品数据
-			this.cartIds = JSON.parse(option.cartIds);
-			console.log(this.cartIds);
+			this.orderId = option.orderId;
 			this.loadData();
 		},
 		filters: {
@@ -181,13 +254,13 @@
 				let date = new Date(time);
 				return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
 			},
-			formatCouponUseType(useType) {
-				if (useType == 0) {
-					return "全场通用";
-				} else if (useType == 1) {
-					return "指定分类商品可用";
-				} else if (useType == 2) {
-					return "指定商品可用";
+			formatPayType(payType) {
+				if (payType == 0) {
+					return "未支付";
+				} else if (payType == 1) {
+					return "支付宝支付";
+				} else if (payType == 2) {
+					return "微信支付";
 				}
 				return null;
 			},
@@ -195,115 +268,117 @@
 		methods: {
 			//生成确认单信息
 			async loadData() {
-				generateConfirmOrder(JSON.stringify(this.cartIds)).then(response => {
-					this.memberReceiveAddressList = response.data.memberReceiveAddressList;
-					this.currentAddress = this.getDefaultAddress();
-					this.cartPromotionItemList = response.data.cartPromotionItemList;
-					this.couponList = [];
-					for (let item of response.data.couponHistoryDetailList) {
-						this.couponList.push(item.coupon);
-					}
-					this.calcAmount = response.data.calcAmount;
-					this.integrationConsumeSetting = response.data.integrationConsumeSetting;
-					this.memberIntegration = response.data.memberIntegration;
+				fetchOrderDetail(this.orderId).then(response => {
+					this.order = response.data;
+					this.setOrderStatus(this.order.status);
 				});
 			},
-			//显示优惠券面板
-			toggleMask(type) {
-				let timer = type === 'show' ? 10 : 300;
-				let state = type === 'show' ? 1 : 0;
-				this.maskState = 2;
-				setTimeout(() => {
-					this.maskState = state;
-				}, timer)
-			},
-			numberChange(data) {
-				this.number = data.number;
-			},
-			changePayType(type) {
-				this.payType = type;
-			},
-			submit() {
-				let orderParam = {
-					payType: 0,
-					couponId: null,
-					cartIds: this.cartIds,
-					memberReceiveAddressId: this.currentAddress.id,
-					useIntegration: this.useIntegration
-				}
-				if (this.currCoupon != null) {
-					orderParam.couponId = this.currCoupon.id;
-				}
-				generateOrder(orderParam).then(response => {
-					let orderId = response.data.order.id;
-					uni.showModal({
-						title: '提示',
-						content: '订单创建成功，是否要立即支付？',
-						confirmText: '去支付',
-						cancelText: '取消',
-						success: function(res) {
-							if (res.confirm) {
-								uni.redirectTo({
-									url: `/pages/money/pay?orderId=${orderId}`
-								})
-							} else if (res.cancel) {
-								console.log("cancel")
-								uni.redirectTo({
-									url: '/pages/order/order?state=0'
-								})
-							}
-						}
-					});
+			// 判断该订单下是否存在还没有被评价的子元素
+			existShowCommentChild(childList)
+			{	
+				
+				let waitCommentList =  childList.filter((item,index) => {
+					return item.commentFlag === 0;
 				});
+				
+				return waitCommentList != null && waitCommentList.length > 0;
 			},
+			submit() {},
 			stopPrevent() {},
-			//获取默认收货地址
-			getDefaultAddress() {
-				for (let item of this.memberReceiveAddressList) {
-					if (item.defaultStatus == 1) {
-						return item;
+			//取消订单
+			cancelOrder(orderId) {
+				let superThis = this;
+				uni.showModal({
+					title: '提示',
+					content: '是否要取消该订单？',
+					success: function(res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							cancelUserOrder({
+								orderId: orderId
+							}).then(response => {
+								uni.hideLoading();
+								superThis.loadData();
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
 					}
-				}
-				if (this.memberReceiveAddressList != null && this.memberReceiveAddressList.length > 0) {
-					return this.memberReceiveAddressList[0];
-				}
-				return null;
+				});
 			},
-			selectCoupon(coupon) {
-				this.currCoupon = coupon;
-				this.calcPayAmount();
-				this.toggleMask();
+			// 创建评价
+			createComment(orderId) {
+				uni.navigateTo({
+					url: `/pages/comment/createComment?orderId=${orderId}`
+				})
 			},
-			//计算支付金额
-			calcPayAmount() {
-				this.calcAmount.payAmount = this.calcAmount.totalAmount - this.calcAmount.promotionAmount - this.calcAmount
-					.freightAmount;
-				if (this.currCoupon != null) {
-					this.calcAmount.payAmount = this.calcAmount.payAmount - this.currCoupon.amount;
-				}
-				if (this.useIntegration != 0) {
-					this.calcAmount.payAmount = this.calcAmount.payAmount - this.calcIntegrationAmount();
-				}
+			
+			//支付订单
+			payOrder(orderId) {
+				uni.redirectTo({
+					url: `/pages/money/pay?orderId=${orderId}`
+				});
 			},
-			//积分转金额
-			calcIntegrationAmount(integration) {
-				if (this.integrationConsumeSetting == undefined || this.integrationConsumeSetting == null) {
-					return 0;
-				}
-				if (this.integrationConsumeSetting.couponStatus == 0) {
-					return 0;
-				}
-				return integration / this.integrationConsumeSetting.deductionPerAmount;
+			//确认收货
+			receiveOrder(orderId) {
+				let superThis = this;
+				uni.showModal({
+					title: '提示',
+					content: '是否要确认收货？',
+					success: function(res) {
+						if (res.confirm) {
+							uni.showLoading({
+								title: '请稍后'
+							})
+							confirmReceiveOrder({
+								orderId: orderId
+							}).then(response => {
+								uni.hideLoading();
+								superThis.loadData();
+							});
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
 			},
-			handleIntegrationInput(event) {
-				if (event.detail.value > this.memberIntegration) {
-					this.useIntegration = this.memberIntegration;
-					uni.showToast({
-						title: `您的积分只有${this.memberIntegration}`,
-						duration: 1000
-					})
-				}
-			},
+			//设置订单状态信息
+			setOrderStatus(status) {
+				switch (status) {
+					case 0:
+						this.orderStatus = {
+							text: '等待付款',
+							image: '/static/icon_wait.png'
+						}
+						break;
+					case 1:
+						this.orderStatus = {
+							text: '等待发货',
+							image: '/static/icon_deliver.png'
+						}
+						break;
+					case 2:
+						this.orderStatus = {
+							text: '等待收货',
+							image: '/static/icon_receive.png'
+						}
+						break;
+					case 3:
+						this.orderStatus = {
+							text: '交易完成',
+							image: '/static/icon_finish.png'
+						}
+						break;
+					case 4:
+						this.orderStatus = {
+							text: '交易关闭',
+							image: '/static/icon_close.png'
+						}
+						break;
+				};
+			}
 		}
 	}
 </script>
@@ -315,6 +390,26 @@
 	}
 
 
+
+	.status-section {
+		height: 200upx;
+		background-color: $base-color;
+		display: flex;
+		align-items: center;
+		padding: 30upx;
+
+		.icon {
+			width: 48upx;
+			height: 48upx;
+		}
+
+		.label-text {
+			color: #fff;
+			margin-left: 30upx;
+		}
+	}
+
+	// 地址信息
 	.address-section {
 		padding: 30upx 0;
 		background: #fff;
@@ -339,11 +434,9 @@
 			width: 100%;
 			height: 5upx;
 		}
-
-
 	}
 
-
+	// 商品集合
 	.goods-section {
 		background: #fff;
 
@@ -428,6 +521,7 @@
 		}
 	}
 
+	// 对应的订单元素集合
 	.good-detail {
 		background: #fff;
 
@@ -435,12 +529,12 @@
 		.good-detail-item-attr {
 			color: #909399;
 		}
-		
-		
+
+
 		.cell-tip {
 			font-size: 26upx;
 			color: $font-color-dark;
-			
+
 			&.red {
 				color: $base-color;
 			}
@@ -448,8 +542,7 @@
 
 	}
 
-	// 底部提交价格的工具
-	.pay-section {
+	.footer {
 		position: fixed;
 		left: 0;
 		bottom: 0;
@@ -462,17 +555,29 @@
 		color: $font-color-base;
 		box-shadow: 0 -1px 5px rgba(0, 0, 0, .1);
 
-		// 价格样式
+		.price-content {
+			padding-left: 30upx;
+		}
+
+		.price-tip {
+			color: $base-color;
+			margin-left: 8upx;
+		}
+
 		.price {
 			font-size: 36upx;
 			color: $base-color;
 		}
 
-		// 提交按钮的自定义样式
 		.submit {
-			height: 90upx;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 280upx;
+			height: 100%;
+			color: #fff;
+			font-size: 32upx;
 			background-color: $base-color;
 		}
-
 	}
 </style>

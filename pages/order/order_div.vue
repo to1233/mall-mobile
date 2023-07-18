@@ -114,10 +114,6 @@
 								</u-col>
 							</u-row>
 						</view>
-
-
-
-
 						</u-row>
 					</view>
 				</u-list-item>

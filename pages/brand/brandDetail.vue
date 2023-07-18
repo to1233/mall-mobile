@@ -126,6 +126,15 @@
 		computed: {
 			...mapState(['hasLogin'])
 		},
+		// 下拉刷新
+		onPullDownRefresh() {
+			this.loadData('refresh');
+		},
+		// 加载更多
+		onReachBottom() {
+			this.queryParam.pageNum++;
+			this.loadData();
+		},
 		methods: {
 			favorite() {
 				if (!this.checkForLogin()) {
@@ -207,15 +216,6 @@
 						}
 					}
 				});
-			},
-			// 下拉刷新
-			onPullDownRefresh() {
-				this.loadData('refresh');
-			},
-			// 加载更多
-			onReachBottom() {
-				this.queryParam.pageNum++;
-				this.loadData();
 			},
 			// 初始化收藏状态
 			initBrandAttention() {

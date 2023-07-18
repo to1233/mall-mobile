@@ -33,7 +33,6 @@
 					</u-col>
 				</u-row>
 			</view>
-
 		</u-sticky>
 
 

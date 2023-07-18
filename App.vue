@@ -208,4 +208,20 @@
 		white-space: nowrap;
 		display: block;
 	}
+	
+	// 内容框架
+	.itemBox {
+		background: #fff;
+		padding: 24rpx 24rpx;
+		border-radius: 20rpx;
+		overflow: hidden;
+		margin-top: 24rpx;
+		justify-content: space-around;
+		align-content: center;
+	
+	
+		margin-top: 11px;
+		background-color: #fff;
+	}
+	
 </style>
